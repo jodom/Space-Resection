@@ -128,11 +128,21 @@ drk = [
 n = length(x); %  = len(y) =len(X) = len(Y) =len(Z)!
 
 %%%iterative solution using the three data points AB and C to solve for the six unknowns
-% DXI = ones(6,1);
+iter = 0; %iteration number #	
+DXI = ones(6,1);
 
-for m=1:1    % 50 iterations
-	A=getA(IP,x,y,X,Y,Z,R,f,drw,drp,drk,n);   %call A matrix Func
-	L=getL(IP,x,y,X,Y,Z,R,f,n);  %call L matrix Func
-	DX = getdx(A,L);  %call dx matrix Func,, Least Square Adjustment
-	IP = IP+DX;
-end
+while DXI~=zeros(6,1) && iter<=1e2  %loop to convergence using DXI=ZEROS  comparison
+    Au = getUnique(IP,x,y,X,Y,Z,R,f,drw,drp,drk,n)
+    L=getL(IP,x,y,X,Y,Z,R,f,3);
+	DXI = (Au'*L);
+	IP = IP-DXI		
+	iter=iter+1;
+end	
+
+% for m=1:1    % 50 iterations
+% 	A=getA(IP,x,y,X,Y,Z,R,f,drw,drp,drk,n);   %call A matrix Func
+% 	L=getL(IP,x,y,X,Y,Z,R,f,n);  %call L matrix Func
+%     Au = getUnique(IP,x,y,X,Y,Z,R,f,drw,drp,drk,n);
+% 	%DX = getdx(A,L);  %call dx matrix Func,, Least Square Adjustment
+% 	%IP = IP+DX;
+% end
